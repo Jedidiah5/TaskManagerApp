@@ -17,10 +17,11 @@ import { MessageSquare, Paperclip, MoreHorizontal, Trash2 } from 'lucide-react';
 
 interface TaskCardProps {
   task: Task;
+  columnId: string; // ID of the column this card currently belongs to
   onDeleteTask: (taskId: string) => void;
 }
 
-export function TaskCard({ task, onDeleteTask }: TaskCardProps) {
+export function TaskCard({ task, columnId, onDeleteTask }: TaskCardProps) {
   const progressPercentage = (task.progressCurrent / task.progressTotal) * 100;
 
   let progressBarColorClass = 'bg-primary'; 
@@ -32,9 +33,25 @@ export function TaskCard({ task, onDeleteTask }: TaskCardProps) {
     progressBarColorClass = 'bg-orange-500';
   }
 
+  const handleDragStart = (event: React.DragEvent<HTMLDivElement>) => {
+    event.dataTransfer.setData('taskId', task.id);
+    event.dataTransfer.setData('sourceColumnId', columnId);
+    (event.target as HTMLElement).classList.add('opacity-50', 'ring-2', 'ring-primary');
+  };
+
+  const handleDragEnd = (event: React.DragEvent<HTMLDivElement>) => {
+    (event.target as HTMLElement).classList.remove('opacity-50', 'ring-2', 'ring-primary');
+  };
 
   return (
-    <Card className="mb-4 shadow-sm hover:shadow-md transition-shadow duration-200 cursor-grab" role="listitem" aria-labelledby={`task-title-${task.id}`}>
+    <Card 
+      className="mb-4 shadow-sm hover:shadow-md transition-shadow duration-200 cursor-grab" 
+      role="listitem" 
+      aria-labelledby={`task-title-${task.id}`}
+      draggable={true}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+    >
       <CardHeader className="p-4 flex flex-row justify-between items-start">
         <div>
           <CardTitle id={`task-title-${task.id}`} className="text-base font-semibold">{task.title}</CardTitle>
