@@ -131,7 +131,7 @@ export function AppSidebar() {
       <SidebarHeader className="px-4 py-3.5 border-b border-sidebar-border group-data-[collapsible=icon]:py-3 group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:justify-center">
         <Link href="/" className="flex items-center gap-2.5 text-sidebar-foreground group-data-[collapsible=icon]:justify-center">
           <Image src="/favicon.ico" alt="TaskMaster Logo" width={28} height={28} className="h-7 w-7 rounded-md group-data-[collapsible=icon]:mx-auto group-data-[collapsible=icon]:h-7 group-data-[collapsible=icon]:w-7" />
-          <span className="text-lg font-semibold group-data-[collapsible=icon]:hidden text-sidebar-primary">TaskMaster</span>
+          <span className="text-lg font-semibold group-data-[collapsible=icon]:hidden text-sidebar-foreground">TaskMaster</span>
         </Link>
       </SidebarHeader>
 
