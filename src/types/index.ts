@@ -1,4 +1,5 @@
 import type { LucideIcon } from 'lucide-react';
+import type React from 'react';
 
 export interface User {
   id: string;
@@ -35,7 +36,8 @@ export interface NavItem {
   href: string;
   label: string;
   iconName?: keyof typeof import('lucide-react');
-  icon?: LucideIcon;
+  icon?: LucideIcon; // For direct component passing
+  imagePath?: string; // For using next/image
   count?: number;
   type?: 'project' | 'task' | 'standard';
   active?: boolean;

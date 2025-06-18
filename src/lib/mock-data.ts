@@ -7,30 +7,31 @@ export const mockUsers: User[] = [
   { id: 'user4', name: 'Diana Prince', avatarUrl: 'https://placehold.co/40x40.png' },
 ];
 
-export const mockProjects: Project[] = [
+export const mockProjectsData: Project[] = [
   { id: 'proj1', name: 'All projects' },
   { id: 'proj2', name: 'Design system' },
   { id: 'proj3', name: 'User flow' },
   { id: 'proj4', name: 'UX research' },
-  { id: 'proj5', name: 'Marketing Campaign Q3' }, // Kept for other data
-  { id: 'proj6', name: 'Mobile App Development' }, // Kept for other data
+  { id: 'proj5', name: 'Marketing Campaign Q3' },
+  { id: 'proj6', name: 'Mobile App Development' },
 ];
 
+
 export const mainNavItemsTop: NavItem[] = [
-  { href: "/", label: "Dashboard", iconName: "LayoutDashboard" },
-  // Projects and Tasks will be handled by Accordion directly in AppSidebar
+  { href: "/", label: "Dashboard", imagePath: "/app-icon.png" },
+  // Projects and Tasks are handled by Accordion directly in AppSidebar
 ];
 
 export const mainNavItemsBottom: NavItem[] = [
-  { href: "/messages", label: "Messages", iconName: "MessageSquare" },
-  { href: "/calendar", label: "Calendar", iconName: "CalendarDays" },
-  { href: "/reminders", label: "Reminders", iconName: "BellRing" },
-  { href: "/settings", label: "Settings", iconName: "Settings" },
+    { href: "/messages", label: "Messages", iconName: "MessageSquare" },
+    { href: "/calendar", label: "Calendar", iconName: "CalendarDays" },
+    { href: "/reminders", label: "Reminders", iconName: "BellRing" },
+    { href: "/settings", label: "Settings", iconName: "Settings" },
 ];
 
 export const projectNavItems: NavItem[] = [
     { href: "/projects/all", label: "All projects", count: 3, type: 'project'},
-    { href: "/projects/design-system", label: "Design system", type: 'project', active: true }, // Active state as per Figma
+    { href: "/projects/design-system", label: "Design system", type: 'project', active: true },
     { href: "/projects/user-flow", label: "User flow", type: 'project' },
     { href: "/projects/ux-research", label: "UX research", type: 'project' },
 ];
@@ -38,12 +39,11 @@ export const projectNavItems: NavItem[] = [
 export const taskNavItems: NavItem[] = [
     { href: "/tasks/all", label: "All tasks", count: 11, type: 'task' },
     { href: "/tasks/todo", label: "To do", count: 4, type: 'task' },
-    { href: "/tasks/inprogress", label: "In progress", count: 4, type: 'task', active: true }, // Active state as per Figma
+    { href: "/tasks/inprogress", label: "In progress", count: 4, type: 'task', active: true },
     { href: "/tasks/done", label: "Done", count: 3, type: 'task' },
 ];
 
 
-// Original mockTasks, can be used for the main TaskBoard if needed, but sidebar uses aggregated counts
 const baseTasks: Omit<Task, 'id' | 'status' | 'projectId'>[] = [
   { 
     title: 'Design new UI presentation', 

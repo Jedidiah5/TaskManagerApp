@@ -3,6 +3,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import * as LucideIcons from 'lucide-react';
 import {
@@ -27,7 +28,7 @@ import {
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
 import { projectNavItems, taskNavItems, mainNavItemsTop, mainNavItemsBottom } from '@/lib/mock-data';
 import type { NavItem } from '@/types';
-import { cn } from "@/lib/utils"; // Import the cn utility
+import { cn } from "@/lib/utils";
 
 const getIcon = (name?: keyof typeof LucideIcons): React.ElementType | null => {
   if (!name) return null;
@@ -43,12 +44,24 @@ export function AppSidebar() {
   };
 
   const renderNavItem = (item: NavItem, isSubItem = false) => {
-    const Icon = getIcon(item.iconName) || item.icon;
     const isActive = item.active || isLinkActive(item.href);
 
+    let iconElement: React.ReactNode = null;
+    if (item.imagePath) {
+      iconElement = <Image src={item.imagePath} alt={item.label} width={20} height={20} className="h-5 w-5 group-data-[collapsible=icon]:h-6 group-data-[collapsible=icon]:w-6" />;
+    } else if (item.iconName) {
+      const IconComponent = getIcon(item.iconName);
+      if (IconComponent) {
+        iconElement = <IconComponent />;
+      }
+    } else if (item.icon) {
+      const DirectIcon = item.icon;
+      iconElement = <DirectIcon />;
+    }
+    
     const buttonContent = (
       <>
-        {Icon && <Icon />}
+        {iconElement}
         <span>{item.label}</span>
         {item.count !== undefined && !isSubItem && (
           <SidebarMenuBadge>{item.count}</SidebarMenuBadge>
@@ -63,7 +76,7 @@ export function AppSidebar() {
           <SidebarMenuBadge
             className={cn(
               isActive && item.type === 'task' ? 
-              "bg-sidebar-task-pill-background text-sidebar-task-pill-foreground" : 
+              "bg-sidebar-active-foreground text-sidebar-active-background" : // For active task pills
               "bg-sidebar-muted-foreground/30 text-sidebar-foreground group-hover/menu-item:bg-sidebar-accent group-hover/menu-item:text-sidebar-accent-foreground peer-data-[active=true]/menu-button:bg-sidebar-active-foreground peer-data-[active=true]/menu-button:text-sidebar-active-background"
             )}
           >
@@ -75,7 +88,7 @@ export function AppSidebar() {
 
     if (isSubItem) {
       return (
-        <SidebarMenuSubItem key={item.href} className="py-0.5">
+        <SidebarMenuSubItem key={item.label} className="py-0.5">
           <Link href={item.href} asChild>
             <SidebarMenuSubButton
               isActive={isActive}
@@ -83,7 +96,7 @@ export function AppSidebar() {
               className={cn(
                 "h-8 text-sm rounded-md",
                 isActive ? 
-                  (item.type === 'task' ? "bg-sidebar-active-background text-sidebar-active-foreground font-medium" : "bg-sidebar-active-background text-sidebar-active-foreground font-medium") : 
+                  "bg-sidebar-active-background text-sidebar-active-foreground font-medium" : 
                   "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
               )}
             >
@@ -117,8 +130,8 @@ export function AppSidebar() {
     <Sidebar collapsible="icon" side="left" variant="sidebar" className="border-r border-sidebar-border bg-sidebar text-sidebar-foreground">
       <SidebarHeader className="px-4 py-3.5 border-b border-sidebar-border group-data-[collapsible=icon]:py-3 group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:justify-center">
         <Link href="/" className="flex items-center gap-2.5 text-sidebar-foreground group-data-[collapsible=icon]:justify-center">
-          <LucideIcons.LayoutGrid className="h-7 w-7 rounded-md bg-sidebar-accent p-1 text-sidebar-accent-foreground group-data-[collapsible=icon]:bg-transparent group-data-[collapsible=icon]:text-sidebar-foreground" />
-          <span className="text-lg font-semibold group-data-[collapsible=icon]:hidden">TaskMaster</span>
+          <Image src="/app-icon.png" alt="TaskMaster Logo" width={28} height={28} className="h-7 w-7 rounded-md group-data-[collapsible=icon]:mx-auto group-data-[collapsible=icon]:h-7 group-data-[collapsible=icon]:w-7" />
+          <span className="text-lg font-semibold group-data-[collapsible=icon]:hidden text-sidebar-primary">TaskMaster</span>
         </Link>
       </SidebarHeader>
 
