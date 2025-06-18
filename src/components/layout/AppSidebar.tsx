@@ -6,6 +6,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import * as LucideIcons from 'lucide-react';
+import { cn } from "@/lib/utils";
 import {
   Sidebar,
   SidebarHeader,
@@ -28,7 +29,6 @@ import {
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
 import { projectNavItems, taskNavItems, mainNavItemsTop, mainNavItemsBottom } from '@/lib/mock-data';
 import type { NavItem } from '@/types';
-import { cn } from "@/lib/utils";
 
 const getIcon = (name?: keyof typeof LucideIcons): React.ElementType | null => {
   if (!name) return null;
@@ -73,10 +73,10 @@ export function AppSidebar() {
       <span className="flex items-center justify-between w-full">
         <span>{item.label}</span>
         {item.count !== undefined && (
-          <SidebarMenuBadge
+           <SidebarMenuBadge
             className={cn(
               isActive && item.type === 'task' ? 
-              "bg-sidebar-active-foreground text-sidebar-active-background" : // For active task pills
+              "bg-sidebar-active-foreground text-sidebar-active-background" : 
               "bg-sidebar-muted-foreground/30 text-sidebar-foreground group-hover/menu-item:bg-sidebar-accent group-hover/menu-item:text-sidebar-accent-foreground peer-data-[active=true]/menu-button:bg-sidebar-active-foreground peer-data-[active=true]/menu-button:text-sidebar-active-background"
             )}
           >
@@ -130,7 +130,7 @@ export function AppSidebar() {
     <Sidebar collapsible="icon" side="left" variant="sidebar" className="border-r border-sidebar-border bg-sidebar text-sidebar-foreground">
       <SidebarHeader className="px-4 py-3.5 border-b border-sidebar-border group-data-[collapsible=icon]:py-3 group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:justify-center">
         <Link href="/" className="flex items-center gap-2.5 text-sidebar-foreground group-data-[collapsible=icon]:justify-center">
-          <Image src="/app-icon.png" alt="TaskMaster Logo" width={28} height={28} className="h-7 w-7 rounded-md group-data-[collapsible=icon]:mx-auto group-data-[collapsible=icon]:h-7 group-data-[collapsible=icon]:w-7" />
+          <Image src="/favicon.ico" alt="TaskMaster Logo" width={28} height={28} className="h-7 w-7 rounded-md group-data-[collapsible=icon]:mx-auto group-data-[collapsible=icon]:h-7 group-data-[collapsible=icon]:w-7" />
           <span className="text-lg font-semibold group-data-[collapsible=icon]:hidden text-sidebar-primary">TaskMaster</span>
         </Link>
       </SidebarHeader>

@@ -1,4 +1,6 @@
+
 import type { User, Project, Task, TaskColumnData, NavItem } from '@/types';
+import * as LucideIcons from 'lucide-react';
 
 export const mockUsers: User[] = [
   { id: 'user1', name: 'Alice Wonderland', avatarUrl: 'https://placehold.co/40x40.png' },
@@ -18,8 +20,7 @@ export const mockProjectsData: Project[] = [
 
 
 export const mainNavItemsTop: NavItem[] = [
-  { href: "/", label: "Dashboard", imagePath: "/app-icon.png" },
-  // Projects and Tasks are handled by Accordion directly in AppSidebar
+  { href: "/", label: "Dashboard", imagePath: "/favicon.ico" },
 ];
 
 export const mainNavItemsBottom: NavItem[] = [
@@ -45,25 +46,25 @@ export const taskNavItems: NavItem[] = [
 
 
 const baseTasks: Omit<Task, 'id' | 'status' | 'projectId'>[] = [
-  { 
-    title: 'Design new UI presentation', 
-    subtitle: 'Dribbble marketing', 
-    progressCurrent: 7, 
-    progressTotal: 10, 
-    dueDate: 'May 20, 2022', 
-    assignees: [mockUsers[0], mockUsers[1]], 
-    commentsCount: 3, 
-    attachmentsCount: 2 
+  {
+    title: 'Design new UI presentation',
+    subtitle: 'Dribbble marketing',
+    progressCurrent: 7,
+    progressTotal: 10,
+    dueDate: 'May 20, 2022',
+    assignees: [mockUsers[0], mockUsers[1]],
+    commentsCount: 3,
+    attachmentsCount: 2
   },
-  { 
-    title: 'Develop login functionality', 
-    subtitle: 'Core feature', 
-    progressCurrent: 3, 
-    progressTotal: 10, 
-    dueDate: 'May 22, 2022', 
-    assignees: [mockUsers[2]], 
-    commentsCount: 1, 
-    attachmentsCount: 0 
+  {
+    title: 'Develop login functionality',
+    subtitle: 'Core feature',
+    progressCurrent: 3,
+    progressTotal: 10,
+    dueDate: 'May 22, 2022',
+    assignees: [mockUsers[2]],
+    commentsCount: 1,
+    attachmentsCount: 0
   },
 ];
 
