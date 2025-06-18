@@ -7,7 +7,7 @@ export interface User {
 }
 
 export interface Task {
-  id: string;
+  id:string;
   title: string;
   subtitle: string;
   status: 'To do' | 'In progress' | 'Done';
@@ -34,10 +34,17 @@ export interface TaskColumnData {
 export interface NavItem {
   href: string;
   label: string;
-  iconName?: keyof typeof import('lucide-react'); // For dynamic icon loading
-  icon?: LucideIcon; // Allow passing icon component directly
+  iconName?: keyof typeof import('lucide-react');
+  icon?: LucideIcon;
   count?: number;
   type?: 'project' | 'task' | 'standard';
-  active?: boolean; // To explicitly set active state from mock data if needed
-  subItems?: NavItem[]; // For nested accordions, though current design uses direct lists
+  active?: boolean;
+  subItems?: NavItem[];
 }
+
+// Data type for the new task form
+export type NewTaskFormData = {
+  title: string;
+  subtitle?: string;
+  status: 'To do' | 'In progress' | 'Done';
+};
