@@ -1,3 +1,4 @@
+
 "use client";
 
 import type { Task } from '@/types';
@@ -5,16 +6,24 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { MessageSquare, Paperclip } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { MessageSquare, Paperclip, MoreHorizontal, Trash2 } from 'lucide-react';
 
 interface TaskCardProps {
   task: Task;
+  onDeleteTask: (taskId: string) => void;
 }
 
-export function TaskCard({ task }: TaskCardProps) {
+export function TaskCard({ task, onDeleteTask }: TaskCardProps) {
   const progressPercentage = (task.progressCurrent / task.progressTotal) * 100;
 
-  let progressBarColorClass = 'bg-primary'; // Default or primary color
+  let progressBarColorClass = 'bg-primary'; 
   if (task.status === 'Done') {
     progressBarColorClass = 'bg-green-500';
   } else if (progressPercentage < 30 && task.status !== 'To do') {
@@ -25,10 +34,26 @@ export function TaskCard({ task }: TaskCardProps) {
 
 
   return (
-    <Card className="mb-4 shadow-sm hover:shadow-md transition-shadow duration-200_ cursor-grab" role="listitem" aria-labelledby={`task-title-${task.id}`}>
-      <CardHeader className="p-4">
-        <CardTitle id={`task-title-${task.id}`} className="text-base font-semibold">{task.title}</CardTitle>
-        <CardDescription className="text-xs">{task.subtitle}</CardDescription>
+    <Card className="mb-4 shadow-sm hover:shadow-md transition-shadow duration-200 cursor-grab" role="listitem" aria-labelledby={`task-title-${task.id}`}>
+      <CardHeader className="p-4 flex flex-row justify-between items-start">
+        <div>
+          <CardTitle id={`task-title-${task.id}`} className="text-base font-semibold">{task.title}</CardTitle>
+          <CardDescription className="text-xs">{task.subtitle}</CardDescription>
+        </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" className="h-8 w-8">
+              <MoreHorizontal className="h-4 w-4" />
+              <span className="sr-only">More options</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={() => onDeleteTask(task.id)} className="text-destructive hover:!text-destructive focus:text-destructive">
+              <Trash2 className="mr-2 h-4 w-4" />
+              Delete task
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </CardHeader>
       <CardContent className="p-4 pt-0">
         <div className="mb-3">

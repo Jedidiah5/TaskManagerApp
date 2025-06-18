@@ -1,3 +1,4 @@
+
 import type { TaskColumnData, NewTaskFormData } from '@/types';
 import { TaskCard } from './TaskCard';
 import { Card } from '@/components/ui/card';
@@ -6,9 +7,10 @@ import { AddTaskDialog } from './AddTaskDialog';
 interface TaskColumnProps {
   column: TaskColumnData;
   onTaskAdd: (taskData: NewTaskFormData) => void;
+  onDeleteTask: (taskId: string) => void;
 }
 
-export function TaskColumn({ column, onTaskAdd }: TaskColumnProps) {
+export function TaskColumn({ column, onTaskAdd, onDeleteTask }: TaskColumnProps) {
   return (
     <div className="flex flex-col bg-secondary/50 p-4 rounded-lg h-full min-h-[calc(100vh-180px)]">
       <div className="flex justify-between items-center mb-4">
@@ -22,7 +24,7 @@ export function TaskColumn({ column, onTaskAdd }: TaskColumnProps) {
           <p className="text-sm text-muted-foreground text-center py-4">No tasks in this column yet.</p>
         ) : (
           column.tasks.map(task => (
-            <TaskCard key={task.id} task={task} />
+            <TaskCard key={task.id} task={task} onDeleteTask={onDeleteTask} />
           ))
         )}
       </div>

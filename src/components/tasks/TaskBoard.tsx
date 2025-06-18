@@ -41,9 +41,16 @@ export function TaskBoard() {
     });
   };
 
+  const handleDeleteTask = (taskId: string) => {
+    setBoardColumns(prevColumns => {
+      return prevColumns.map(column => ({
+        ...column,
+        tasks: column.tasks.filter(task => task.id !== taskId),
+      }));
+    });
+  };
+
   if (boardColumns.length === 0 && initialTaskBoardColumns.length > 0) {
-     // This helps prevent showing "Loading..." if mock data is available but state hasn't caught up yet.
-     // Still, it's good to handle the truly empty/initial state.
     return <div className="text-center p-8 text-muted-foreground">Initializing task board...</div>;
   }
   
@@ -55,7 +62,12 @@ export function TaskBoard() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 h-full">
       {boardColumns.map(column => (
-        <TaskColumn key={column.id} column={column} onTaskAdd={handleAddTask} />
+        <TaskColumn 
+          key={column.id} 
+          column={column} 
+          onTaskAdd={handleAddTask} 
+          onDeleteTask={handleDeleteTask} 
+        />
       ))}
     </div>
   );
