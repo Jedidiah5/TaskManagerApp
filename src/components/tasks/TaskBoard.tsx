@@ -3,23 +3,28 @@
 
 import React, { useState, useEffect } from 'react';
 import { TaskColumn } from './TaskColumn';
+import { TaskFormDialog } from './TaskFormDialog';
 import { taskBoardColumns as initialTaskBoardColumns } from '@/lib/mock-data';
-import type { TaskColumnData, Task, NewTaskFormData } from '@/types';
+import type { TaskColumnData, Task, TaskFormData } from '@/types';
+import { format } from 'date-fns';
 
 const LOCAL_STORAGE_KEY = 'taskBoardState';
 
 export function TaskBoard() {
   const [boardColumns, setBoardColumns] = useState<TaskColumnData[]>([]);
   const [isInitialized, setIsInitialized] = useState(false);
+  
+  // State for the dialog
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const [defaultStatus, setDefaultStatus] = useState<Task['status']>('To do');
 
   useEffect(() => {
-    // This effect runs only once on the client-side to load data from localStorage.
     try {
       const savedState = localStorage.getItem(LOCAL_STORAGE_KEY);
       if (savedState) {
         setBoardColumns(JSON.parse(savedState));
       } else {
-        // Initialize with a deep copy to prevent direct mutation issues
         setBoardColumns(JSON.parse(JSON.stringify(initialTaskBoardColumns)));
       }
     } catch (error) {
@@ -30,8 +35,6 @@ export function TaskBoard() {
   }, []);
 
   useEffect(() => {
-    // This effect runs whenever boardColumns changes, saving it to localStorage.
-    // It only runs after the initial state has been loaded.
     if (isInitialized) {
       try {
         localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(boardColumns));
@@ -41,15 +44,36 @@ export function TaskBoard() {
     }
   }, [boardColumns, isInitialized]);
 
-  const handleAddTask = (newTaskData: NewTaskFormData) => {
+  const handleOpenFormForAdd = (status: Task['status']) => {
+    setEditingTask(null);
+    setDefaultStatus(status);
+    setIsFormOpen(true);
+  };
+
+  const handleOpenFormForEdit = (task: Task) => {
+    setEditingTask(task);
+    setIsFormOpen(true);
+  };
+  
+  const handleSaveTask = (formData: TaskFormData, taskId?: string) => {
+    if (taskId) {
+      // Update existing task
+      handleUpdateTask(taskId, formData);
+    } else {
+      // Add new task
+      handleAddTask(formData);
+    }
+  };
+
+  const handleAddTask = (formData: TaskFormData) => {
     const newTask: Task = {
       id: `task-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
-      title: newTaskData.title,
-      subtitle: newTaskData.subtitle || '',
-      status: newTaskData.status,
-      progressCurrent: 0,
-      progressTotal: 5, 
-      dueDate: 'Not set',
+      title: formData.title,
+      subtitle: formData.subtitle || '',
+      status: formData.status,
+      progressCurrent: formData.progressCurrent || 0,
+      progressTotal: formData.progressTotal || 5, 
+      dueDate: formData.dueDate ? format(formData.dueDate, 'PPP') : 'Not set',
     };
 
     setBoardColumns(prevColumns => {
@@ -65,6 +89,41 @@ export function TaskBoard() {
     });
   };
 
+  const handleUpdateTask = (taskId: string, formData: TaskFormData) => {
+    setBoardColumns(prevColumns => {
+      let taskToMove: Task | null = null;
+      
+      // First, remove the task from its original column and update it
+      const newColumns = prevColumns.map(column => {
+        const taskIndex = column.tasks.findIndex(t => t.id === taskId);
+        if (taskIndex > -1) {
+          taskToMove = {
+            ...column.tasks[taskIndex],
+            ...formData,
+            dueDate: formData.dueDate ? format(formData.dueDate, 'PPP') : 'Not set',
+            progressCurrent: formData.progressCurrent ?? column.tasks[taskIndex].progressCurrent,
+            progressTotal: formData.progressTotal ?? column.tasks[taskIndex].progressTotal,
+          };
+          return {
+            ...column,
+            tasks: column.tasks.filter(t => t.id !== taskId),
+          };
+        }
+        return column;
+      });
+
+      // Then, add the updated task to its new column
+      if (taskToMove) {
+        const targetColumnIndex = newColumns.findIndex(col => col.title === taskToMove!.status);
+        if (targetColumnIndex > -1) {
+          newColumns[targetColumnIndex].tasks.push(taskToMove);
+        }
+      }
+      
+      return newColumns;
+    });
+  };
+
   const handleDeleteTask = (taskId: string) => {
     setBoardColumns(prevColumns => {
       return prevColumns.map(column => ({
@@ -76,17 +135,11 @@ export function TaskBoard() {
 
   const handleTaskDrop = (taskId: string, sourceColumnId: string, targetColumnId: string) => {
     if (sourceColumnId === targetColumnId) {
-      // Handle reordering within the same column if needed in the future
       return;
     }
-
     let draggedTask: Task | undefined;
     let targetColumnTitle: TaskColumnData['title'] | undefined;
-
-    // Create a new state array for modification
-    let newBoardColumns = [...boardColumns];
-
-    // Find and remove task from source column
+    const newBoardColumns = [...boardColumns];
     const sourceColIndex = newBoardColumns.findIndex(col => col.id === sourceColumnId);
     if (sourceColIndex > -1) {
       draggedTask = newBoardColumns[sourceColIndex].tasks.find(t => t.id === taskId);
@@ -97,54 +150,48 @@ export function TaskBoard() {
         };
       }
     }
-
-    if (!draggedTask) {
-      console.error("Dragged task not found or source column incorrect.");
-      return;
-    }
-
-    // Find target column and add task
+    if (!draggedTask) return;
     const targetColIndex = newBoardColumns.findIndex(col => col.id === targetColumnId);
     if (targetColIndex > -1) {
       targetColumnTitle = newBoardColumns[targetColIndex].title;
-      const updatedTask = { ...draggedTask, status: targetColumnTitle }; // Update task status
+      const updatedTask = { ...draggedTask, status: targetColumnTitle };
       newBoardColumns[targetColIndex] = {
         ...newBoardColumns[targetColIndex],
         tasks: [...newBoardColumns[targetColIndex].tasks, updatedTask],
       };
     } else {
-      console.error("Target column not found.");
-      // Optionally, re-add task to source if target is invalid, or handle error
-      // For now, if a target not found, the task is effectively "lost" from the board in this drop action
-      // To be robust, one might re-insert it into the source or provide user feedback.
-      // Reverting by re-adding to source:
       if (sourceColIndex > -1) {
          newBoardColumns[sourceColIndex].tasks.push(draggedTask);
       }
-      setBoardColumns(newBoardColumns); // Revert to state before trying to add to target
-      return;
     }
-    
     setBoardColumns(newBoardColumns);
   };
 
-
   if (!isInitialized) {
-    // This prevents a flash of the initial empty state while localStorage is being read.
     return <div className="text-center p-8 text-muted-foreground">Initializing task board...</div>;
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 h-full">
-      {boardColumns.map(column => (
-        <TaskColumn 
-          key={column.id} 
-          column={column} 
-          onTaskAdd={handleAddTask} 
-          onDeleteTask={handleDeleteTask}
-          onTaskDrop={handleTaskDrop} 
-        />
-      ))}
-    </div>
+    <>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 h-full">
+        {boardColumns.map(column => (
+          <TaskColumn 
+            key={column.id} 
+            column={column} 
+            onAddTask={() => handleOpenFormForAdd(column.title)} 
+            onEditTask={handleOpenFormForEdit}
+            onDeleteTask={handleDeleteTask}
+            onTaskDrop={handleTaskDrop} 
+          />
+        ))}
+      </div>
+      <TaskFormDialog
+        isOpen={isFormOpen}
+        onOpenChange={setIsFormOpen}
+        onSave={handleSaveTask}
+        taskToEdit={editingTask}
+        defaultStatus={defaultStatus}
+      />
+    </>
   );
 }

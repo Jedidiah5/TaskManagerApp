@@ -30,8 +30,11 @@ export interface NavItem {
 }
 
 // Data type for the new task form
-export type NewTaskFormData = {
+export type TaskFormData = {
   title: string;
   subtitle?: string;
   status: 'To do' | 'In progress' | 'Done';
+  dueDate?: Date;
+  progressCurrent?: number;
+  progressTotal?: number;
 };

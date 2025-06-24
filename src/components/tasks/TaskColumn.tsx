@@ -1,19 +1,21 @@
 
 import React, { useState } from 'react';
-import type { TaskColumnData, NewTaskFormData } from '@/types';
+import type { TaskColumnData, Task } from '@/types';
 import { TaskCard } from './TaskCard';
 import { Card } from '@/components/ui/card';
-import { AddTaskDialog } from './AddTaskDialog';
+import { Button } from '@/components/ui/button';
+import { Plus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface TaskColumnProps {
   column: TaskColumnData;
-  onTaskAdd: (taskData: NewTaskFormData) => void;
+  onAddTask: () => void;
+  onEditTask: (task: Task) => void;
   onDeleteTask: (taskId: string) => void;
   onTaskDrop: (taskId: string, sourceColumnId: string, targetColumnId: string) => void;
 }
 
-export function TaskColumn({ column, onTaskAdd, onDeleteTask, onTaskDrop }: TaskColumnProps) {
+export function TaskColumn({ column, onAddTask, onEditTask, onDeleteTask, onTaskDrop }: TaskColumnProps) {
   const [isDragOver, setIsDragOver] = useState(false);
 
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
@@ -58,7 +60,9 @@ export function TaskColumn({ column, onTaskAdd, onDeleteTask, onTaskDrop }: Task
         <h2 className="text-lg font-semibold text-foreground">
           {column.title} <span className="text-sm font-normal text-muted-foreground">({column.tasks.length})</span>
         </h2>
-        <AddTaskDialog defaultStatus={column.title} onTaskAdd={onTaskAdd} />
+        <Button variant="ghost" size="sm" className="text-primary hover:text-primary" onClick={onAddTask}>
+          <Plus className="h-4 w-4 mr-1" /> Add new task
+        </Button>
       </div>
       <div 
         className="flex-grow space-y-4 overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-muted-foreground/50 scrollbar-track-transparent"
@@ -70,7 +74,8 @@ export function TaskColumn({ column, onTaskAdd, onDeleteTask, onTaskDrop }: Task
             <TaskCard 
               key={task.id} 
               task={task} 
-              columnId={column.id} 
+              columnId={column.id}
+              onEditTask={onEditTask}
               onDeleteTask={onDeleteTask} 
             />
           ))

@@ -10,27 +10,27 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { MoreHorizontal, Trash2 } from 'lucide-react';
+import { MoreHorizontal, Trash2, Pencil } from 'lucide-react';
 
 interface TaskCardProps {
   task: Task;
-  columnId: string; // ID of the column this card currently belongs to
+  columnId: string;
+  onEditTask: (task: Task) => void;
   onDeleteTask: (taskId: string) => void;
 }
 
-export function TaskCard({ task, columnId, onDeleteTask }: TaskCardProps) {
-  const progressPercentage = (task.progressCurrent / task.progressTotal) * 100;
+export function TaskCard({ task, columnId, onEditTask, onDeleteTask }: TaskCardProps) {
+  const progressPercentage = (task.progressTotal > 0) ? (task.progressCurrent / task.progressTotal) * 100 : 0;
 
-  let progressBarColorClass = 'bg-primary'; 
-  if (task.status === 'Done') {
-    progressBarColorClass = 'bg-green-500';
-  } else if (progressPercentage < 30 && task.status !== 'To do') {
-    progressBarColorClass = 'bg-red-500';
-  } else if (task.status === 'In progress' || (task.status === 'To do' && progressPercentage > 0) ) {
-    progressBarColorClass = 'bg-orange-500';
-  }
+  let progressBarColor = 'var(--primary)'; // Default blue
+    if (task.status === 'Done') {
+        progressBarColor = 'rgb(34 197 94)'; // green-500
+    } else if (progressPercentage > 0 && task.status !== 'To do') {
+        progressBarColor = 'rgb(249 115 22)'; // orange-500
+    }
 
   const handleDragStart = (event: React.DragEvent<HTMLDivElement>) => {
     event.dataTransfer.setData('taskId', task.id);
@@ -64,6 +64,11 @@ export function TaskCard({ task, columnId, onDeleteTask }: TaskCardProps) {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
+             <DropdownMenuItem onClick={() => onEditTask(task)}>
+              <Pencil className="mr-2 h-4 w-4" />
+              Edit task
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => onDeleteTask(task.id)} className="text-destructive hover:!text-destructive focus:text-destructive">
               <Trash2 className="mr-2 h-4 w-4" />
               Delete task
@@ -77,11 +82,13 @@ export function TaskCard({ task, columnId, onDeleteTask }: TaskCardProps) {
             <span>Progress</span>
             <span>{task.progressCurrent}/{task.progressTotal}</span>
           </div>
-          <Progress value={progressPercentage} aria-label={`Progress ${progressPercentage}%`} className="h-2 [&>div]:bg-[--progress-color]" style={{ '--progress-color': `var(${progressBarColorClass.replace('bg-','--')})` } as React.CSSProperties} />
+          <Progress value={progressPercentage} aria-label={`Progress ${progressPercentage}%`} className="h-2 [&>div]:bg-[--progress-color]" style={{ '--progress-color': progressBarColor } as React.CSSProperties} />
         </div>
         
         <div className="flex items-center justify-between text-xs">
-          <Badge variant="outline" className="py-1 px-2">{task.dueDate}</Badge>
+          {task.dueDate !== 'Not set' && (
+            <Badge variant="outline" className="py-1 px-2">{task.dueDate}</Badge>
+          )}
         </div>
       </CardContent>
     </Card>
