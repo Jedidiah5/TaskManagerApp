@@ -6,7 +6,6 @@ import { TaskColumn } from './TaskColumn';
 import { TaskFormDialog } from './TaskFormDialog';
 import { taskBoardColumns as initialTaskBoardColumns } from '@/lib/mock-data';
 import type { TaskColumnData, Task, TaskFormData } from '@/types';
-import { format } from 'date-fns';
 
 const LOCAL_STORAGE_KEY = 'taskBoardState';
 
@@ -73,7 +72,7 @@ export function TaskBoard() {
       status: formData.status,
       progressCurrent: formData.progressCurrent || 0,
       progressTotal: formData.progressTotal || 5, 
-      dueDate: formData.dueDate ? format(formData.dueDate, 'PPP') : 'Not set',
+      dueDate: formData.dueDate ? formData.dueDate.toISOString() : 'Not set',
     };
 
     setBoardColumns(prevColumns => {
@@ -100,7 +99,7 @@ export function TaskBoard() {
           taskToMove = {
             ...column.tasks[taskIndex],
             ...formData,
-            dueDate: formData.dueDate ? format(formData.dueDate, 'PPP') : 'Not set',
+            dueDate: formData.dueDate ? formData.dueDate.toISOString() : 'Not set',
             progressCurrent: formData.progressCurrent ?? column.tasks[taskIndex].progressCurrent,
             progressTotal: formData.progressTotal ?? column.tasks[taskIndex].progressTotal,
           };

@@ -14,6 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal, Trash2, Pencil } from 'lucide-react';
+import { format } from 'date-fns';
 
 interface TaskCardProps {
   task: Task;
@@ -87,7 +88,7 @@ export function TaskCard({ task, columnId, onEditTask, onDeleteTask }: TaskCardP
         
         <div className="flex items-center justify-between text-xs">
           {task.dueDate !== 'Not set' && (
-            <Badge variant="outline" className="py-1 px-2">{task.dueDate}</Badge>
+            <Badge variant="outline" className="py-1 px-2">{format(new Date(task.dueDate), 'PPP')}</Badge>
           )}
         </div>
       </CardContent>
