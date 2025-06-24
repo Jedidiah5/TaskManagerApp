@@ -28,7 +28,7 @@ export function AppHeader() {
             <span className="sr-only">Toggle Menu</span>
           </Button>
         )}
-        <h1 className="hidden text-xl font-semibold text-foreground md:block">Welcome back, Vincent 👋</h1>
+        <h1 className="hidden text-xl font-semibold text-foreground md:block">Welcome back, Enesi 👋</h1>
       </div>
       
       <div className="flex items-center gap-2 md:gap-4">
@@ -46,7 +46,7 @@ export function AppHeader() {
         )}
         <Avatar className="h-8 w-8">
           <AvatarImage src="https://placehold.co/40x40.png" alt="User avatar" data-ai-hint="user avatar" />
-          <AvatarFallback>V</AvatarFallback>
+          <AvatarFallback>E</AvatarFallback>
         </Avatar>
       </div>
     </header>
