@@ -6,13 +6,40 @@ import { TaskColumn } from './TaskColumn';
 import { taskBoardColumns as initialTaskBoardColumns } from '@/lib/mock-data';
 import type { TaskColumnData, Task, NewTaskFormData } from '@/types';
 
+const LOCAL_STORAGE_KEY = 'taskBoardState';
+
 export function TaskBoard() {
   const [boardColumns, setBoardColumns] = useState<TaskColumnData[]>([]);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
-    // Initialize with a deep copy to prevent direct mutation issues if initialTaskBoardColumns is used elsewhere
-    setBoardColumns(JSON.parse(JSON.stringify(initialTaskBoardColumns)));
+    // This effect runs only once on the client-side to load data from localStorage.
+    try {
+      const savedState = localStorage.getItem(LOCAL_STORAGE_KEY);
+      if (savedState) {
+        setBoardColumns(JSON.parse(savedState));
+      } else {
+        // Initialize with a deep copy to prevent direct mutation issues
+        setBoardColumns(JSON.parse(JSON.stringify(initialTaskBoardColumns)));
+      }
+    } catch (error) {
+      console.error("Failed to parse board state from localStorage", error);
+      setBoardColumns(JSON.parse(JSON.stringify(initialTaskBoardColumns)));
+    }
+    setIsInitialized(true);
   }, []);
+
+  useEffect(() => {
+    // This effect runs whenever boardColumns changes, saving it to localStorage.
+    // It only runs after the initial state has been loaded.
+    if (isInitialized) {
+      try {
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(boardColumns));
+      } catch (error) {
+        console.error("Failed to save board state to localStorage", error);
+      }
+    }
+  }, [boardColumns, isInitialized]);
 
   const handleAddTask = (newTaskData: NewTaskFormData) => {
     const newTask: Task = {
@@ -92,7 +119,7 @@ export function TaskBoard() {
     } else {
       console.error("Target column not found.");
       // Optionally, re-add task to source if target is invalid, or handle error
-      // For now, if target not found, the task is effectively "lost" from the board in this drop action
+      // For now, if a target not found, the task is effectively "lost" from the board in this drop action
       // To be robust, one might re-insert it into the source or provide user feedback.
       // Reverting by re-adding to source:
       if (sourceColIndex > -1) {
@@ -106,14 +133,9 @@ export function TaskBoard() {
   };
 
 
-  if (boardColumns.length === 0 && initialTaskBoardColumns.length > 0) {
-    // This condition might be hit briefly if initialTaskBoardColumns is fetched async or useEffect is slow
-    // Better to check if boardColumns has items or show a generic loading/empty state
+  if (!isInitialized) {
+    // This prevents a flash of the initial empty state while localStorage is being read.
     return <div className="text-center p-8 text-muted-foreground">Initializing task board...</div>;
-  }
-  
-  if (boardColumns.length === 0) {
-    return <div className="text-center p-8 text-muted-foreground">No columns to display.</div>;
   }
 
   return (
