@@ -28,12 +28,12 @@ export function TaskCard({ task, columnId, onEditTask, onDeleteTask }: TaskCardP
   
   const dueDate = task.dueDate ? parseISO(task.dueDate) : null;
 
-  let progressBarColor = 'var(--primary)'; // Default blue
-    if (task.status === 'Done') {
-        progressBarColor = 'rgb(34 197 94)'; // green-500
-    } else if (progressPercentage > 0 && task.status !== 'To do') {
-        progressBarColor = 'rgb(249 115 22)'; // orange-500
-    }
+  let progressBarClass = '';
+  if (task.status === 'Done') {
+    progressBarClass = '!bg-chart-2'; // Use a green from the theme
+  } else if (progressPercentage > 0 && task.status !== 'To do') {
+    progressBarClass = '!bg-chart-1'; // Use an orange from the theme
+  }
 
   const handleDragStart = (event: React.DragEvent<HTMLDivElement>) => {
     event.dataTransfer.setData('taskId', task.id);
@@ -88,9 +88,7 @@ export function TaskCard({ task, columnId, onEditTask, onDeleteTask }: TaskCardP
           <Progress 
             value={progressPercentage} 
             className="h-2"
-            style={{
-                '--primary': progressBarColor,
-            } as React.CSSProperties}
+            indicatorClassName={progressBarClass}
           />
         </div>
         <div className="flex items-center justify-between text-xs">
