@@ -1,6 +1,7 @@
+
 "use client";
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, Bell, CalendarDays } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -8,7 +9,15 @@ import { useSidebar } from '@/components/ui/sidebar'; // To get the trigger for 
 
 export function AppHeader() {
   const { toggleSidebar, isMobile } = useSidebar();
-  const currentDate = "19 May 2022"; // As per design example
+  const [currentDate, setCurrentDate] = useState('');
+
+  useEffect(() => {
+    setCurrentDate(new Date().toLocaleDateString('en-US', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    }));
+  }, []);
 
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center justify-between gap-4 border-b bg-card px-4 sm:px-6 shadow-sm">
@@ -29,10 +38,12 @@ export function AppHeader() {
         <Button variant="ghost" size="icon" aria-label="Notifications">
           <Bell className="h-5 w-5" />
         </Button>
-        <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
-          <CalendarDays className="h-5 w-5" />
-          <span>{currentDate}</span>
-        </div>
+        {currentDate && (
+          <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
+            <CalendarDays className="h-5 w-5" />
+            <span>{currentDate}</span>
+          </div>
+        )}
         <Avatar className="h-8 w-8">
           <AvatarImage src="https://placehold.co/40x40.png" alt="User avatar" data-ai-hint="user avatar" />
           <AvatarFallback>V</AvatarFallback>
