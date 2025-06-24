@@ -38,47 +38,16 @@ export const projectNavItems: NavItem[] = [
 ];
 
 export const taskNavItems: NavItem[] = [
-    { href: "/tasks/all", label: "All tasks", count: 11, type: 'task' },
-    { href: "/tasks/todo", label: "To do", count: 4, type: 'task' },
-    { href: "/tasks/inprogress", label: "In progress", count: 4, type: 'task', active: true },
-    { href: "/tasks/done", label: "Done", count: 3, type: 'task' },
+    { href: "/tasks/all", label: "All tasks", count: 0, type: 'task' },
+    { href: "/tasks/todo", label: "To do", count: 0, type: 'task' },
+    { href: "/tasks/inprogress", label: "In progress", count: 0, type: 'task', active: true },
+    { href: "/tasks/done", label: "Done", count: 0, type: 'task' },
 ];
 
 
-const baseTasks: Omit<Task, 'id' | 'status' | 'projectId'>[] = [
-  {
-    title: 'Design new UI presentation',
-    subtitle: 'Dribbble marketing',
-    progressCurrent: 7,
-    progressTotal: 10,
-    dueDate: 'May 20, 2022',
-    assignees: [mockUsers[0], mockUsers[1]],
-    commentsCount: 3,
-    attachmentsCount: 2
-  },
-  {
-    title: 'Develop login functionality',
-    subtitle: 'Core feature',
-    progressCurrent: 3,
-    progressTotal: 10,
-    dueDate: 'May 22, 2022',
-    assignees: [mockUsers[2]],
-    commentsCount: 1,
-    attachmentsCount: 0
-  },
-];
+const baseTasks: Omit<Task, 'id' | 'status' | 'projectId'>[] = [];
 
-export const mockTasks: Task[] = [
-  { ...baseTasks[0], id: 'task1', status: 'In progress', projectId: 'proj2' },
-  { ...baseTasks[1], id: 'task2', status: 'In progress', projectId: 'proj4' },
-  { id: 'task3', title: 'Write API documentation', subtitle: 'Developer portal', progressCurrent: 0, progressTotal: 5, dueDate: 'May 25, 2022', assignees: [mockUsers[1], mockUsers[3]], commentsCount: 0, attachmentsCount: 1, status: 'To do', projectId: 'proj4' },
-  { id: 'task4', title: 'User testing session', subtitle: 'Feedback collection', progressCurrent: 9, progressTotal: 10, dueDate: 'May 18, 2022', assignees: [mockUsers[0]], commentsCount: 5, attachmentsCount: 3, status: 'In progress', projectId: 'proj2' },
-  { id: 'task5', title: 'Deploy to staging server', subtitle: 'Release candidate', progressCurrent: 10, progressTotal: 10, dueDate: 'May 15, 2022', assignees: [mockUsers[2], mockUsers[3]], commentsCount: 2, attachmentsCount: 0, status: 'Done', projectId: 'proj5' },
-  { id: 'task6', title: 'Fix critical bug #1024', subtitle: 'Hotfix', progressCurrent: 1, progressTotal: 1, dueDate: 'May 19, 2022', assignees: [mockUsers[1]], commentsCount: 8, attachmentsCount: 0, status: 'To do', projectId: 'proj3' },
-  { id: 'task7', title: 'Plan next sprint features', subtitle: 'Product Roadmap', progressCurrent: 5, progressTotal: 8, dueDate: 'May 28, 2022', assignees: [mockUsers[0], mockUsers[2], mockUsers[3]], commentsCount: 4, attachmentsCount: 1, status: 'To do', projectId: 'proj3' },
-  { ...baseTasks[0], id: 'task8', title: 'Update branding guidelines', subtitle: 'Marketing Docs', status: 'Done', projectId: 'proj2', progressCurrent: 10, progressTotal: 10 },
-  { ...baseTasks[1], id: 'task9', title: 'Research competitor analysis', subtitle: 'Strategy', status: 'To do', projectId: 'proj3', progressCurrent: 1, progressTotal: 5 },
-];
+export const mockTasks: Task[] = [];
 
 export const taskBoardColumns: TaskColumnData[] = [
   {
