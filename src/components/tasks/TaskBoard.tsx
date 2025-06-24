@@ -49,11 +49,7 @@ export function TaskBoard() {
       status: newTaskData.status,
       progressCurrent: 0,
       progressTotal: 5, 
-      dueDate: 'Not set', 
-      assignees: [], 
-      commentsCount: 0, 
-      attachmentsCount: 0, 
-      projectId: 'defaultProj', 
+      dueDate: 'Not set',
     };
 
     setBoardColumns(prevColumns => {

@@ -5,7 +5,6 @@ import type { Task } from '@/types';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -13,7 +12,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { MessageSquare, Paperclip, MoreHorizontal, Trash2 } from 'lucide-react';
+import { MoreHorizontal, Trash2 } from 'lucide-react';
 
 interface TaskCardProps {
   task: Task;
@@ -83,30 +82,6 @@ export function TaskCard({ task, columnId, onDeleteTask }: TaskCardProps) {
         
         <div className="flex items-center justify-between text-xs">
           <Badge variant="outline" className="py-1 px-2">{task.dueDate}</Badge>
-          <div className="flex -space-x-2">
-            {task.assignees.slice(0, 3).map((assignee, index) => (
-              <Avatar key={assignee.id} className="h-6 w-6 border-2 border-card" title={assignee.name}>
-                <AvatarImage src={assignee.avatarUrl} alt={assignee.name} data-ai-hint="person face" />
-                <AvatarFallback>{assignee.name.charAt(0)}</AvatarFallback>
-              </Avatar>
-            ))}
-            {task.assignees.length > 3 && (
-              <Avatar className="h-6 w-6 border-2 border-card bg-muted">
-                <AvatarFallback>+{task.assignees.length - 3}</AvatarFallback>
-              </Avatar>
-            )}
-          </div>
-        </div>
-
-        <div className="mt-3 pt-3 border-t border-border flex items-center justify-end space-x-3">
-          <div className="flex items-center text-xs text-muted-foreground">
-            <MessageSquare className="h-3.5 w-3.5 mr-1" />
-            {task.commentsCount}
-          </div>
-          <div className="flex items-center text-xs text-muted-foreground">
-            <Paperclip className="h-3.5 w-3.5 mr-1" />
-            {task.attachmentsCount}
-          </div>
         </div>
       </CardContent>
     </Card>

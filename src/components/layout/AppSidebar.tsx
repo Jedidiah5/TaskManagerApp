@@ -27,7 +27,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
-import { projectNavItems, taskNavItems, mainNavItemsTop, mainNavItemsBottom } from '@/lib/mock-data';
+import { taskNavItems, mainNavItemsTop, mainNavItemsBottom } from '@/lib/mock-data';
 import type { NavItem } from '@/types';
 
 const getIcon = (name?: keyof typeof LucideIcons): React.ElementType | null => {
@@ -139,21 +139,7 @@ export function AppSidebar() {
         <SidebarMenu>
           {mainNavItemsTop.map(item => renderNavItem(item))}
 
-          <Accordion type="multiple" defaultValue={["projects", "tasks"]} className="w-full group-data-[collapsible=icon]:hidden">
-            <AccordionItem value="projects" className="border-none">
-              <AccordionTrigger className="p-2 h-10 rounded-md text-sm font-medium text-sidebar-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:no-underline data-[state=open]:bg-sidebar-accent [&[data-state=open]>svg]:text-sidebar-accent-foreground">
-                <div className="flex items-center gap-3">
-                  <LucideIcons.Folder className="h-5 w-5" />
-                  <span>Projects</span>
-                </div>
-              </AccordionTrigger>
-              <AccordionContent className="pt-1 pb-0">
-                <SidebarMenuSub className="ml-0 pl-0 border-l-0">
-                  {projectNavItems.map(subItem => renderNavItem(subItem, true))}
-                </SidebarMenuSub>
-              </AccordionContent>
-            </AccordionItem>
-
+          <Accordion type="multiple" defaultValue={["tasks"]} className="w-full group-data-[collapsible=icon]:hidden">
             <AccordionItem value="tasks" className="border-none">
               <AccordionTrigger className="p-2 h-10 rounded-md text-sm font-medium text-sidebar-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:no-underline data-[state=open]:bg-sidebar-accent [&[data-state=open]>svg]:text-sidebar-accent-foreground">
                 <div className="flex items-center gap-3">
@@ -170,13 +156,6 @@ export function AppSidebar() {
           </Accordion>
           
             <div className="hidden group-data-[collapsible=icon]:flex flex-col space-y-2">
-                 <Link href="/projects/all" asChild>
-                    <SidebarMenuButton tooltip="Projects" isActive={pathname.startsWith('/projects')} 
-                        className={cn(pathname.startsWith('/projects') ? "!bg-sidebar-active-background !text-sidebar-active-icon-foreground" : "")}
-                    >
-                        <LucideIcons.Folder />
-                    </SidebarMenuButton>
-                 </Link>
                  <Link href="/tasks/all" asChild>
                     <SidebarMenuButton tooltip="Tasks" isActive={pathname.startsWith('/tasks')}
                         className={cn(pathname.startsWith('/tasks') ? "!bg-sidebar-active-background !text-sidebar-active-icon-foreground" : "")}

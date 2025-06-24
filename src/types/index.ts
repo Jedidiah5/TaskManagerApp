@@ -1,12 +1,6 @@
 import type { LucideIcon } from 'lucide-react';
 import type React from 'react';
 
-export interface User {
-  id: string;
-  name: string;
-  avatarUrl?: string;
-}
-
 export interface Task {
   id:string;
   title: string;
@@ -15,15 +9,6 @@ export interface Task {
   progressCurrent: number;
   progressTotal: number;
   dueDate: string; // Should be a Date object or ISO string in a real app
-  assignees: User[];
-  commentsCount: number;
-  attachmentsCount: number;
-  projectId: string;
-}
-
-export interface Project {
-  id: string;
-  name: string;
 }
 
 export interface TaskColumnData {
