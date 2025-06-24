@@ -33,6 +33,7 @@ import {
 } from "@/components/ui/form";
 import { DatePicker } from "@/components/ui/date-picker";
 import type { Task, TaskFormData } from "@/types";
+import { parseISO, isValid } from "date-fns";
 
 const TaskFormSchema = z.object({
   title: z.string().min(1, { message: "Title is required" }),
@@ -76,11 +77,12 @@ export function TaskFormDialog({
     if (isOpen) {
       if (taskToEdit) {
         // Edit mode
+        const parsedDate = taskToEdit.dueDate ? parseISO(taskToEdit.dueDate) : undefined;
         form.reset({
           title: taskToEdit.title,
           subtitle: taskToEdit.subtitle,
           status: taskToEdit.status,
-          dueDate: taskToEdit.dueDate !== 'Not set' ? new Date(taskToEdit.dueDate) : undefined,
+          dueDate: parsedDate && isValid(parsedDate) ? parsedDate : undefined,
           progressCurrent: taskToEdit.progressCurrent,
           progressTotal: taskToEdit.progressTotal,
         });
