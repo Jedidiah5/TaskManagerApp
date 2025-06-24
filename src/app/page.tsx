@@ -13,20 +13,17 @@ export default function DashboardPage() {
       <SidebarInset>
         <AppHeader />
         <main className="flex-1 p-4 md:p-6 space-y-6 bg-background">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-            <h1 className="text-2xl md:text-3xl font-bold text-foreground">Welcome back, Vincent 👋</h1>
-            <div className="flex items-center gap-2">
-              <Tabs defaultValue="board" className="w-auto">
-                <TabsList>
-                  <TabsTrigger value="board">Board view</TabsTrigger>
-                  {/* Add other views here if needed */}
-                </TabsList>
-              </Tabs>
-              <Button variant="outline">
-                <Plus className="h-4 w-4 mr-2" />
-                Add new view
-              </Button>
-            </div>
+          <div className="flex justify-end items-center gap-4">
+            <Tabs defaultValue="board" className="w-auto">
+              <TabsList>
+                <TabsTrigger value="board">Board view</TabsTrigger>
+                {/* Add other views here if needed */}
+              </TabsList>
+            </Tabs>
+            <Button variant="outline">
+              <Plus className="h-4 w-4 mr-2" />
+              Add new view
+            </Button>
           </div>
           
           <Tabs defaultValue="board" className="w-full">
