@@ -7,12 +7,15 @@ import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar';
 import React, { useState, useEffect } from 'react';
 import { taskBoardColumns as initialTaskBoardColumns } from '@/lib/mock-data';
 import type { TaskColumnData, Task } from '@/types';
+import UserOnboardingModal from '@/components/UserOnboardingModal';
 
 const LOCAL_STORAGE_KEY = 'taskBoardState';
 
 export default function DashboardPage() {
   const [boardColumns, setBoardColumns] = useState<TaskColumnData[]>([]);
   const [isInitialized, setIsInitialized] = useState(false);
+  const [user, setUser] = useState<{ nickname: string; profilePic?: string } | null>(null);
+  const [showOnboarding, setShowOnboarding] = useState(false);
 
   useEffect(() => {
     try {
@@ -36,6 +39,22 @@ export default function DashboardPage() {
     }
   }, [boardColumns, isInitialized]);
 
+  useEffect(() => {
+    const savedUser = localStorage.getItem('taskUser');
+    if (savedUser) {
+      setUser(JSON.parse(savedUser));
+    } else {
+      setShowOnboarding(true);
+    }
+  }, []);
+
+  const handleUserSubmit = (nickname: string, profilePic?: string) => {
+    const userData = { nickname, profilePic };
+    localStorage.setItem('taskUser', JSON.stringify(userData));
+    setUser(userData);
+    setShowOnboarding(false);
+  };
+
   // Compute counts
   const allTasks = boardColumns.flatMap(col => col.tasks);
   const todoCount = boardColumns.find(col => col.title === 'To do')?.tasks.length || 0;
@@ -45,6 +64,9 @@ export default function DashboardPage() {
 
   return (
     <SidebarProvider defaultOpen={true}>
+      {showOnboarding && (
+        <UserOnboardingModal onSubmit={handleUserSubmit} />
+      )}
       <AppSidebar
         allCount={allCount}
         todoCount={todoCount}
@@ -52,7 +74,7 @@ export default function DashboardPage() {
         doneCount={doneCount}
       />
       <SidebarInset>
-        <AppHeader />
+        <AppHeader user={user} />
         <main className="flex-1 p-4 md:p-6">
           <TaskBoard
             boardColumns={boardColumns}

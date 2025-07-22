@@ -72,6 +72,31 @@ export function TaskCard({ task, columnId, onEditTask, onDeleteTask }: TaskCardP
                   <Pencil className="mr-2 h-4 w-4" />
                   <span>Edit</span>
                 </DropdownMenuItem>
+                {/* Move to next/previous status options */}
+                {task.status === 'To do' && (
+                  <DropdownMenuItem onClick={() => onEditTask({ ...task, status: 'In progress' })}>
+                    <span className="mr-2">➡️</span>
+                    <span>Move to In progress</span>
+                  </DropdownMenuItem>
+                )}
+                {task.status === 'In progress' && (
+                  <>
+                    <DropdownMenuItem onClick={() => onEditTask({ ...task, status: 'To do' })}>
+                      <span className="mr-2">⬅️</span>
+                      <span>Move to To do</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => onEditTask({ ...task, status: 'Done' })}>
+                      <span className="mr-2">✅</span>
+                      <span>Move to Done</span>
+                    </DropdownMenuItem>
+                  </>
+                )}
+                {task.status === 'Done' && (
+                  <DropdownMenuItem onClick={() => onEditTask({ ...task, status: 'In progress' })}>
+                    <span className="mr-2">↩️</span>
+                    <span>Move to In progress</span>
+                  </DropdownMenuItem>
+                )}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => onDeleteTask(task.id)} className="text-destructive">
                   <Trash2 className="mr-2 h-4 w-4" />

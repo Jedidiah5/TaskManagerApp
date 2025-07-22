@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useSidebar } from '@/components/ui/sidebar'; // To get the trigger for mobile
 
-export function AppHeader() {
+export function AppHeader({ user }) {
   const { toggleSidebar, isMobile } = useSidebar();
   const [currentDate, setCurrentDate] = useState('');
 
@@ -28,7 +28,9 @@ export function AppHeader() {
             <span className="sr-only">Toggle Menu</span>
           </Button>
         )}
-        <h1 className="hidden text-xl font-semibold text-foreground md:block">Welcome back, Enesi 👋</h1>
+        <h1 className="hidden text-xl font-semibold text-foreground md:block">
+          Welcome back, {user?.nickname || 'User'} 👋
+        </h1>
       </div>
       
       <div className="flex items-center gap-2 md:gap-4">
@@ -45,8 +47,10 @@ export function AppHeader() {
           </div>
         )}
         <Avatar className="h-8 w-8">
-          <AvatarImage src="https://placehold.co/40x40.png" alt="User avatar" data-ai-hint="user avatar" />
-          <AvatarFallback>E</AvatarFallback>
+          {user?.profilePic ? (
+            <AvatarImage src={user.profilePic} alt="User avatar" data-ai-hint="user avatar" />
+          ) : null}
+          <AvatarFallback>{user?.nickname ? user.nickname[0].toUpperCase() : 'U'}</AvatarFallback>
         </Avatar>
       </div>
     </header>
