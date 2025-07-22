@@ -44,6 +44,9 @@ const TaskFormSchema = z.object({
   dueDate: z.date().optional(),
   progressCurrent: z.coerce.number().min(0, { message: "Must be a positive number" }).optional(),
   progressTotal: z.coerce.number().min(1, { message: "Must be at least 1" }).optional(),
+  priority: z.enum(['low', 'medium', 'high'], {
+    required_error: "Priority is required",
+  }),
 }).refine(data => {
     if (data.progressCurrent !== undefined && data.progressTotal !== undefined) {
         return data.progressCurrent <= data.progressTotal;
@@ -85,6 +88,7 @@ export function TaskFormDialog({
           dueDate: parsedDate && isValid(parsedDate) ? parsedDate : undefined,
           progressCurrent: taskToEdit.progressCurrent,
           progressTotal: taskToEdit.progressTotal,
+          priority: taskToEdit.priority,
         });
       } else {
         // Add mode
@@ -95,6 +99,7 @@ export function TaskFormDialog({
           dueDate: undefined,
           progressCurrent: 0,
           progressTotal: 5, // Default total
+          priority: 'low',
         });
       }
     }
@@ -179,6 +184,38 @@ export function TaskFormDialog({
                 )}
               />
             </div>
+            {/* Priority Selector */}
+            <FormField
+              control={form.control}
+              name="priority"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Priority</FormLabel>
+                  <div className="flex gap-4 mt-1">
+                    {[
+                      { value: 'low', color: 'bg-green-500', label: 'Low' },
+                      { value: 'medium', color: 'bg-yellow-400', label: 'Medium' },
+                      { value: 'high', color: 'bg-red-500', label: 'High' },
+                    ].map(option => (
+                      <button
+                        type="button"
+                        key={option.value}
+                        className={`w-7 h-7 rounded-full border-2 flex items-center justify-center focus:outline-none transition-all duration-150
+                          ${option.color}
+                          ${field.value === option.value ? 'ring-2 ring-offset-2 ring-black border-black scale-110' : 'border-gray-300'}`}
+                        aria-label={option.label}
+                        onClick={() => field.onChange(option.value)}
+                      >
+                        {field.value === option.value && (
+                          <span className="block w-3 h-3 bg-white rounded-full" />
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <div className="grid grid-cols-2 gap-4">
               <FormField
                 control={form.control}

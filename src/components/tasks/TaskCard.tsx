@@ -52,28 +52,34 @@ export function TaskCard({ task, columnId, onEditTask, onDeleteTask }: TaskCardP
       onDragEnd={handleDragEnd}
       className="group cursor-grab hover:shadow-lg transition-shadow duration-150 ease-in-out bg-card"
     >
-      <CardHeader className="p-4 pb-2">
+      <CardHeader className="p-4 pb-2 relative">
         <div className="flex items-start justify-between">
           <CardTitle className="text-base font-semibold leading-tight pr-2">{task.title}</CardTitle>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-7 w-7 flex-shrink-0">
-                <MoreHorizontal className="h-4 w-4" />
-                <span className="sr-only">Task options</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => onEditTask(task)}>
-                <Pencil className="mr-2 h-4 w-4" />
-                <span>Edit</span>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => onDeleteTask(task.id)} className="text-destructive">
-                <Trash2 className="mr-2 h-4 w-4" />
-                <span>Delete</span>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <div className="flex items-center gap-2">
+            {/* Priority Circle */}
+            {task.priority === 'low' && <span className="w-4 h-4 rounded-full bg-green-500 border-2 border-white shadow" title="Low priority" />}
+            {task.priority === 'medium' && <span className="w-4 h-4 rounded-full bg-yellow-400 border-2 border-white shadow" title="Medium priority" />}
+            {task.priority === 'high' && <span className="w-4 h-4 rounded-full bg-red-500 border-2 border-white shadow" title="High priority" />}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="h-7 w-7 flex-shrink-0">
+                  <MoreHorizontal className="h-4 w-4" />
+                  <span className="sr-only">Task options</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => onEditTask(task)}>
+                  <Pencil className="mr-2 h-4 w-4" />
+                  <span>Edit</span>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => onDeleteTask(task.id)} className="text-destructive">
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  <span>Delete</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
         {task.subtitle && (
           <CardDescription className="text-sm text-muted-foreground pt-1">{task.subtitle}</CardDescription>

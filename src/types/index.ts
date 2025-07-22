@@ -9,6 +9,7 @@ export interface Task {
   progressCurrent: number;
   progressTotal: number;
   dueDate: string; // Should be a Date object or ISO string in a real app
+  priority: 'low' | 'medium' | 'high';
 }
 
 export interface TaskColumnData {
@@ -37,4 +38,5 @@ export type TaskFormData = {
   dueDate?: Date;
   progressCurrent?: number;
   progressTotal?: number;
+  priority: 'low' | 'medium' | 'high';
 };
