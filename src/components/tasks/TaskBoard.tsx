@@ -73,6 +73,7 @@ export function TaskBoard() {
       progressCurrent: formData.progressCurrent || 0,
       progressTotal: formData.progressTotal || 5, 
       dueDate: formData.dueDate ? formData.dueDate.toISOString() : 'Not set',
+      priority: formData.priority || 'low',
     };
 
     setBoardColumns(prevColumns => {

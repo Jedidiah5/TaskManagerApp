@@ -98,7 +98,7 @@ export function TaskFormDialog({
           status: defaultStatus || 'To do',
           dueDate: undefined,
           progressCurrent: 0,
-          progressTotal: 5, // Default total
+          progressTotal: 1, // Default total changed from 5 to 1
           priority: 'low',
         });
       }
