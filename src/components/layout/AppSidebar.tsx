@@ -36,12 +36,20 @@ const getIcon = (name?: keyof typeof LucideIcons): React.ElementType | null => {
   return IconComponent || null;
 };
 
-export function AppSidebar() {
+export function AppSidebar({ allCount = 0, todoCount = 0, inProgressCount = 0, doneCount = 0 }) {
   const pathname = usePathname();
   const isLinkActive = (href: string, exact = false) => {
     if (exact) return pathname === href;
     return pathname === href || pathname.startsWith(href + '/');
   };
+
+  // Move dynamicTaskNavItems definition here
+  const dynamicTaskNavItems = [
+    { href: "/tasks/all", label: "All tasks", count: allCount, type: 'task' },
+    { href: "/tasks/todo", label: "To do", count: todoCount, type: 'task' },
+    { href: "/tasks/inprogress", label: "In progress", count: inProgressCount, type: 'task' },
+    { href: "/tasks/done", label: "Done", count: doneCount, type: 'task' },
+  ];
 
   const renderNavItem = (item: NavItem, isSubItem = false) => {
     const isActive = item.active || isLinkActive(item.href);
@@ -149,7 +157,7 @@ export function AppSidebar() {
               </AccordionTrigger>
               <AccordionContent className="pt-1 pb-0">
                 <SidebarMenuSub className="ml-0 pl-0 border-l-0">
-                  {taskNavItems.map(subItem => renderNavItem(subItem, true))}
+                  {dynamicTaskNavItems.map(subItem => renderNavItem(subItem, true))}
                 </SidebarMenuSub>
               </AccordionContent>
             </AccordionItem>

@@ -154,7 +154,14 @@ export function TaskBoard() {
     const targetColIndex = newBoardColumns.findIndex(col => col.id === targetColumnId);
     if (targetColIndex > -1) {
       targetColumnTitle = newBoardColumns[targetColIndex].title;
-      const updatedTask = { ...draggedTask, status: targetColumnTitle };
+      let updatedTask = { ...draggedTask, status: targetColumnTitle };
+      // If moving to 'In progress', increment progressCurrent by 1 (not exceeding progressTotal)
+      if (targetColumnTitle === 'In progress') {
+        updatedTask.progressCurrent = Math.min(
+          (updatedTask.progressCurrent || 0) + 1,
+          updatedTask.progressTotal || 1
+        );
+      }
       newBoardColumns[targetColIndex] = {
         ...newBoardColumns[targetColIndex],
         tasks: [...newBoardColumns[targetColIndex].tasks, updatedTask],

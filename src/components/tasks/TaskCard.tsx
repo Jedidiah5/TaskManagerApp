@@ -87,15 +87,27 @@ export function TaskCard({ task, columnId, onEditTask, onDeleteTask }: TaskCardP
       </CardHeader>
       <CardContent className="p-4 pt-0">
         <div className="mb-3">
-          <div className="flex justify-between items-center mb-1 text-xs text-muted-foreground">
-            <span>Progress</span>
-            <span>{task.progressCurrent}/{task.progressTotal}</span>
-          </div>
-          <Progress 
-            value={progressPercentage} 
-            className="h-2"
-            indicatorClassName={progressBarClass}
-          />
+          {task.status === 'Done' ? (
+            <div className="flex flex-col items-center justify-center py-4">
+              <svg className="w-8 h-8 text-green-500 mb-2" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+              <span className="text-green-600 font-semibold text-lg">Well done!</span>
+              <span className="text-muted-foreground text-sm">Great job completing this task.</span>
+            </div>
+          ) : (
+            <>
+              <div className="flex justify-between items-center mb-1 text-xs text-muted-foreground">
+                <span>Progress</span>
+                <span>{task.progressCurrent}/{task.progressTotal}</span>
+              </div>
+              <Progress 
+                value={progressPercentage} 
+                className="h-2"
+                indicatorClassName={progressBarClass}
+              />
+            </>
+          )}
         </div>
         <div className="flex items-center justify-between text-xs">
           {dueDate && isValid(dueDate) ? (

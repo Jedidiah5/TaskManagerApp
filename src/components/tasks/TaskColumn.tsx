@@ -70,7 +70,10 @@ export function TaskColumn({ column, onAddTask, onEditTask, onDeleteTask, onTask
         {column.tasks.length === 0 && !isDragOver ? ( // Hide "no tasks" message if dragging over to avoid overlap with placeholder
           <p className="text-sm text-muted-foreground text-center py-4">No tasks in this column yet.</p>
         ) : (
-          column.tasks.map(task => (
+          [...column.tasks].sort((a, b) => {
+            const priorityOrder = { high: 0, medium: 1, low: 2 };
+            return priorityOrder[a.priority] - priorityOrder[b.priority];
+          }).map(task => (
             <TaskCard 
               key={task.id} 
               task={task} 
