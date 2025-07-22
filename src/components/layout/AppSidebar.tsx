@@ -178,15 +178,6 @@ export function AppSidebar({ allCount = 0, todoCount = 0, inProgressCount = 0, d
       </SidebarContent>
 
       <SidebarFooter className="p-3 border-t border-sidebar-border space-y-2 group-data-[collapsible=icon]:p-2 group-data-[collapsible=icon]:space-y-1">
-        <SidebarMenuButton
-            variant="default"
-            className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:justify-center"
-            tooltip="Log Out"
-            onClick={() => console.log("Log out clicked")}
-        >
-            <LucideIcons.LogOut />
-            <span className="group-data-[collapsible=icon]:hidden">Log Out</span>
-        </SidebarMenuButton>
         <ThemeToggle />
       </SidebarFooter>
     </Sidebar>

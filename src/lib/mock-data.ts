@@ -6,7 +6,6 @@ export const mainNavItemsTop: NavItem[] = [
 ];
 
 export const mainNavItemsBottom: NavItem[] = [
-    { href: "/messages", label: "Messages", iconName: "MessageSquare" },
     { href: "/calendar", label: "Calendar", iconName: "CalendarDays" },
     { href: "/reminders", label: "Reminders", iconName: "BellRing" },
     { href: "/settings", label: "Settings", iconName: "Settings" },
