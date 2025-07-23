@@ -4,8 +4,8 @@ import { ThemeProvider } from '@/components/ThemeProvider';
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
-  title: 'TaskMaster UI',
-  description: 'Task Management Web App UI',
+  title: 'TaskManager UI',
+  description: 'Task Manager Web App UI',
 };
 
 export default function RootLayout({

@@ -30,8 +30,8 @@ export default function UserOnboardingModal({ onSubmit }) {
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
       <form onSubmit={handleSubmit} className="bg-card text-foreground rounded-xl p-8 shadow-2xl w-full max-w-sm flex flex-col gap-5 border border-border">
         <div className="flex flex-col items-center mb-2">
-          <Image src="/favicon.ico" alt="TaskMaster Logo" width={48} height={48} className="mb-2 rounded" />
-          <h2 className="text-2xl font-bold mb-1">Welcome to TaskMaster!</h2>
+          <Image src="/favicon.ico" alt="TaskManager Logo" width={48} height={48} className="mb-2 rounded" />
+          <h2 className="text-2xl font-bold mb-1">Welcome to TaskManager!</h2>
           <p className="text-muted-foreground text-sm">Set up your profile to get started</p>
         </div>
         <label className="flex flex-col gap-1">
