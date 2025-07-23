@@ -52,9 +52,11 @@ export function TaskCard({ task, columnId, onEditTask, onDeleteTask }: TaskCardP
       onDragEnd={handleDragEnd}
       className="group cursor-grab hover:shadow-lg transition-shadow duration-150 ease-in-out bg-card"
     >
-      <CardHeader className="p-4 pb-2 relative">
+      <CardHeader className="p-4 pb-2 relative md:p-4 md:pb-2 sm:p-3 sm:pb-2">
         <div className="flex items-start justify-between">
-          <CardTitle className="text-base font-semibold leading-tight pr-2">{task.title}</CardTitle>
+          <CardTitle className="text-base font-semibold leading-tight pr-2 md:text-base sm:text-lg text-lg">
+            {task.title}
+          </CardTitle>
           <div className="flex items-center gap-2">
             {/* Priority Circle */}
             {task.priority === 'low' && <span className="w-4 h-4 rounded-full bg-green-500 border-2 border-white shadow" title="Low priority" />}
@@ -110,7 +112,7 @@ export function TaskCard({ task, columnId, onEditTask, onDeleteTask }: TaskCardP
           <CardDescription className="text-sm text-muted-foreground pt-1">{task.subtitle}</CardDescription>
         )}
       </CardHeader>
-      <CardContent className="p-4 pt-0">
+      <CardContent className="p-4 pt-0 md:p-4 md:pt-0 sm:p-3 sm:pt-0">
         <div className="mb-3">
           {task.status === 'Done' ? (
             <div className="flex flex-col items-center justify-center py-4">

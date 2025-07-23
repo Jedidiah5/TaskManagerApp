@@ -6,6 +6,7 @@ import { TaskColumn } from './TaskColumn';
 import { TaskFormDialog } from './TaskFormDialog';
 import { taskBoardColumns as initialTaskBoardColumns } from '@/lib/mock-data';
 import type { TaskColumnData, Task, TaskFormData } from '@/types';
+import { Plus } from 'lucide-react';
 
 const LOCAL_STORAGE_KEY = 'taskBoardState';
 
@@ -201,6 +202,15 @@ export default function TaskBoard() {
           </div>
         ))}
       </div>
+      {/* Floating Add Task Button (mobile only) */}
+      <button
+        type="button"
+        className="fixed bottom-6 right-6 z-40 bg-primary text-white rounded-full shadow-lg p-4 md:hidden hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary"
+        onClick={() => setIsFormOpen(true)}
+        aria-label="Add Task"
+      >
+        <Plus className="w-6 h-6" />
+      </button>
       <TaskFormDialog
         isOpen={isFormOpen}
         onOpenChange={setIsFormOpen}
