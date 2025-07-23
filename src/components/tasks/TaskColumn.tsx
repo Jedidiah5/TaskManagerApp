@@ -50,7 +50,8 @@ export function TaskColumn({ column, onAddTask, onEditTask, onDeleteTask, onTask
     <div 
       className={cn(
         "flex flex-col bg-secondary/50 p-4 rounded-lg h-full min-h-[calc(100vh-180px)] transition-all duration-150 ease-in-out",
-        isDragOver ? "border-2 border-primary ring-2 ring-primary shadow-lg" : "border-2 border-transparent"
+        isDragOver ? "border-2 border-primary ring-2 ring-primary shadow-lg" : "border-2 border-transparent",
+        "mb-6 md:mb-0"
       )}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}

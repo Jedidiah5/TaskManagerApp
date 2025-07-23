@@ -28,7 +28,7 @@ export default function UserOnboardingModal({ onSubmit }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
-      <form onSubmit={handleSubmit} className="bg-card text-foreground rounded-xl p-8 shadow-2xl w-full max-w-sm flex flex-col gap-5 border border-border">
+      <form onSubmit={handleSubmit} className="bg-card text-foreground rounded-xl p-6 shadow-2xl w-full max-w-sm sm:max-w-xs flex flex-col gap-5 border border-border mx-2 relative">
         <div className="flex flex-col items-center mb-2">
           <Image src="/favicon.ico" alt="TaskManager Logo" width={48} height={48} className="mb-2 rounded" />
           <h2 className="text-2xl font-bold mb-1">Welcome to TaskManager!</h2>
@@ -60,6 +60,7 @@ export default function UserOnboardingModal({ onSubmit }) {
         </label>
         {error && <div className="text-red-500 text-sm text-center">{error}</div>}
         <button type="submit" className="bg-primary hover:bg-primary/90 text-white rounded px-4 py-2 mt-2 font-semibold transition-colors">Save</button>
+        <button type="button" className="absolute top-2 right-2 text-2xl text-muted-foreground hover:text-primary focus:outline-none" onClick={() => window.location.reload()} aria-label="Close">&times;</button>
       </form>
     </div>
   );
