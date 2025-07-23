@@ -2,7 +2,7 @@
 
 import { AppHeader } from '@/components/layout/AppHeader';
 import { AppSidebar } from '@/components/layout/AppSidebar';
-import { TaskBoard } from '@/components/tasks/TaskBoard';
+import TaskBoard, { scrollToColumn } from '@/components/tasks/TaskBoard';
 import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar';
 import React, { useState, useEffect } from 'react';
 import { taskBoardColumns as initialTaskBoardColumns } from '@/lib/mock-data';

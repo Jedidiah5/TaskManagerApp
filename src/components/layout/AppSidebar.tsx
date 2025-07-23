@@ -32,6 +32,8 @@ import type { NavItem } from '@/types';
 import { Calendar } from '@/components/ui/calendar';
 import { useState, useEffect } from 'react';
 import { useTheme } from '@/components/ThemeProvider';
+import { scrollToColumn } from '@/components/tasks/TaskBoard';
+import { useSidebar } from '@/components/ui/sidebar';
 
 const getIcon = (name?: keyof typeof LucideIcons): React.ElementType | null => {
   if (!name) return null;
@@ -54,6 +56,7 @@ export function AppSidebar({ allCount = 0, todoCount = 0, inProgressCount = 0, d
   const [settingsProfilePic, setSettingsProfilePic] = useState('');
   const [settingsError, setSettingsError] = useState('');
   const { theme, setTheme } = useTheme();
+  const { isMobile, toggleSidebar } = useSidebar();
 
   useEffect(() => {
     if (showReminders) {
@@ -207,6 +210,48 @@ export function AppSidebar({ allCount = 0, todoCount = 0, inProgressCount = 0, d
             <span>{item.label}</span>
           </button>
         </SidebarMenuItem>
+      );
+    }
+
+    if (item.label === 'All tasks' || item.label === 'To do' || item.label === 'In progress' || item.label === 'Done') {
+      return (
+        <SidebarMenuSubItem key={item.label} className="py-0.5">
+          <button
+            type="button"
+            onClick={() => {
+              if (isMobile) {
+                let id = '';
+                if (item.label === 'All tasks') id = 'todo'; // Scroll to first column for 'All tasks'
+                else if (item.label === 'To do') id = 'todo';
+                else if (item.label === 'In progress') id = 'inprogress';
+                else if (item.label === 'Done') id = 'done';
+                if (id) {
+                  scrollToColumn(id);
+                  toggleSidebar();
+                }
+              }
+            }}
+            className={cn(
+              'flex items-center justify-between w-full h-8 text-sm rounded-md',
+              isLinkActive(item.href) ? 'bg-sidebar-active-background text-sidebar-active-foreground font-medium' : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
+              !isMobile && 'cursor-default'
+            )}
+            disabled={!isMobile}
+          >
+            <span>{item.label}</span>
+            {item.count !== undefined && (
+              <SidebarMenuBadge
+                className={cn(
+                  isLinkActive(item.href) && item.type === 'task' ?
+                    'bg-sidebar-active-foreground text-sidebar-active-background' :
+                    'bg-sidebar-muted-foreground/30 text-sidebar-foreground group-hover/menu-item:bg-sidebar-accent group-hover/menu-item:text-sidebar-accent-foreground peer-data-[active=true]/menu-button:bg-sidebar-active-foreground peer-data-[active=true]/menu-button:text-sidebar-active-background'
+                )}
+              >
+                {item.count}
+              </SidebarMenuBadge>
+            )}
+          </button>
+        </SidebarMenuSubItem>
       );
     }
 

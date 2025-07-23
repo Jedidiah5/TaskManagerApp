@@ -9,7 +9,15 @@ import type { TaskColumnData, Task, TaskFormData } from '@/types';
 
 const LOCAL_STORAGE_KEY = 'taskBoardState';
 
-export function TaskBoard() {
+// Helper to scroll to a column by id
+export function scrollToColumn(columnId: string) {
+  const el = document.getElementById(columnId);
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+export default function TaskBoard() {
   const [boardColumns, setBoardColumns] = useState<TaskColumnData[]>([]);
   const [isInitialized, setIsInitialized] = useState(false);
   
@@ -182,14 +190,15 @@ export function TaskBoard() {
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 h-full">
         {boardColumns.map(column => (
-          <TaskColumn 
-            key={column.id} 
-            column={column} 
-            onAddTask={() => handleOpenFormForAdd(column.title)} 
-            onEditTask={handleOpenFormForEdit}
-            onDeleteTask={handleDeleteTask}
-            onTaskDrop={handleTaskDrop} 
-          />
+          <div id={column.id} key={column.id}>
+            <TaskColumn 
+              column={column} 
+              onAddTask={() => handleOpenFormForAdd(column.title)} 
+              onEditTask={handleOpenFormForEdit}
+              onDeleteTask={handleDeleteTask}
+              onTaskDrop={handleTaskDrop} 
+            />
+          </div>
         ))}
       </div>
       <TaskFormDialog
