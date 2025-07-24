@@ -4,7 +4,7 @@ import type { TaskColumnData, Task } from '@/types';
 import { TaskCard } from './TaskCard';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Plus } from 'lucide-react';
+import { Plus, Trash2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface TaskColumnProps {
@@ -13,9 +13,10 @@ interface TaskColumnProps {
   onEditTask: (task: Task) => void;
   onDeleteTask: (taskId: string) => void;
   onTaskDrop: (taskId: string, sourceColumnId: string, targetColumnId: string) => void;
+  onDeleteAllTasks: (columnId: string) => void;
 }
 
-export function TaskColumn({ column, onAddTask, onEditTask, onDeleteTask, onTaskDrop }: TaskColumnProps) {
+export function TaskColumn({ column, onAddTask, onEditTask, onDeleteTask, onTaskDrop, onDeleteAllTasks }: TaskColumnProps) {
   const [isDragOver, setIsDragOver] = useState(false);
 
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
@@ -61,9 +62,21 @@ export function TaskColumn({ column, onAddTask, onEditTask, onDeleteTask, onTask
         <h2 className="text-lg font-semibold text-foreground">
           {column.title} <span className="text-sm font-normal text-muted-foreground">({column.tasks.length})</span>
         </h2>
-        <Button variant="ghost" size="sm" className="text-primary hover:text-primary" onClick={onAddTask}>
-          <Plus className="h-4 w-4 mr-1" /> Add new task
-        </Button>
+        <div className="flex gap-2 items-center">
+          <Button variant="ghost" size="sm" className="text-primary hover:text-primary" onClick={onAddTask}>
+            <Plus className="h-4 w-4 mr-1" /> Add new task
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="text-destructive hover:text-destructive"
+            aria-label="Delete all tasks"
+            onClick={() => onDeleteAllTasks(column.id)}
+            disabled={column.tasks.length === 0}
+          >
+            <Trash2 className="h-5 w-5" />
+          </Button>
+        </div>
       </div>
       <div 
         className="flex-grow space-y-4 overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-muted-foreground/50 scrollbar-track-transparent"

@@ -142,6 +142,14 @@ export default function TaskBoard() {
     });
   };
 
+  const handleDeleteAllTasks = (columnId: string) => {
+    setBoardColumns(prevColumns =>
+      prevColumns.map(column =>
+        column.id === columnId ? { ...column, tasks: [] } : column
+      )
+    );
+  };
+
   const handleTaskDrop = (taskId: string, sourceColumnId: string, targetColumnId: string) => {
     if (sourceColumnId === targetColumnId) {
       return;
@@ -197,7 +205,8 @@ export default function TaskBoard() {
               onAddTask={() => handleOpenFormForAdd(column.title)} 
               onEditTask={handleOpenFormForEdit}
               onDeleteTask={handleDeleteTask}
-              onTaskDrop={handleTaskDrop} 
+              onTaskDrop={handleTaskDrop}
+              onDeleteAllTasks={handleDeleteAllTasks}
             />
           </div>
         ))}
