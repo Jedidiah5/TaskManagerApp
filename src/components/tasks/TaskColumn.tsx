@@ -6,6 +6,17 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Plus, Trash2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 interface TaskColumnProps {
   column: TaskColumnData;
@@ -66,16 +77,36 @@ export function TaskColumn({ column, onAddTask, onEditTask, onDeleteTask, onTask
           <Button variant="ghost" size="sm" className="text-primary hover:text-primary" onClick={onAddTask}>
             <Plus className="h-4 w-4 mr-1" /> Add new task
           </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="text-destructive hover:text-destructive"
-            aria-label="Delete all tasks"
-            onClick={() => onDeleteAllTasks(column.id)}
-            disabled={column.tasks.length === 0}
-          >
-            <Trash2 className="h-5 w-5" />
-          </Button>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-destructive hover:text-destructive"
+                aria-label="Delete all tasks"
+                disabled={column.tasks.length === 0}
+              >
+                <Trash2 className="h-5 w-5" />
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Delete all tasks?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This will permanently delete all {column.tasks.length} task{column.tasks.length !== 1 ? 's' : ''} in the "{column.title}" column. This action cannot be undone.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={() => onDeleteAllTasks(column.id)}
+                  className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                >
+                  Delete All
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       </div>
       <div 
